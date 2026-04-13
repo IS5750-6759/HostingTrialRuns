@@ -66,7 +66,7 @@ function App() {
   const dispatch = useDispatch()
   useEffect(()=>{
     dispatch(initializeData("http://localhost:3000/videos"))
-  },[]);
+  },[dispatch]);
 
   useYouTubeInit();
   return (

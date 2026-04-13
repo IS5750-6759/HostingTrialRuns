@@ -18,7 +18,7 @@ const [data, setData] = useState(null);
             }
         };
         fetchData();
-    }, []);
+    }, [url]);
 
     return {data,loading,error}
 }

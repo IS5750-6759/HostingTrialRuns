@@ -5,7 +5,7 @@ const useLoadNextVideo = (playerRef,playerReady,videoId)=>{
     playerRef.current && playerReady
       ? playerRef.current.loadVideoById(videoId)
       : null;
-  }, [videoId]);
+  }, [videoId,playerReady,playerRef]);
 }
 
 export default useLoadNextVideo

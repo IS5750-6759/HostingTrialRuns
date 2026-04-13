@@ -15,7 +15,7 @@ const useVideoProgress = (videoId,playerReady,playerRef,onProgressUpdate=(elapse
       }, 7);
     }
     return () => clearInterval(timer);
-  }, [videoId, playerReady]);
+  }, [videoId, playerReady,onProgressUpdate,playerRef]);
 }
 
 export default useVideoProgress

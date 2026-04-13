@@ -1,18 +1,19 @@
-import { useRef,useEffect,useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
-const useYouTubePlayer = (videoId,onStateChange=(event)=>{})=>{
-    const [playerReady, setPlayerReady] = useState(false);
-    const playerRef = useRef();
-    const containerRef = useRef();
-  // When the page loads create the callback function so that the YouTube API can create the video.
+const useYouTubePlayer = (videoId, onStateChange = (event) => {}) => {
+  const [playerReady, setPlayerReady] = useState(false);
+  const playerRef = useRef();
+  const containerRef = useRef();
+  const videoIdRef = useRef(videoId);
+  const onStateChangeRef = useRef(onStateChange);
+  
   useEffect(() => {
     function createPlayer() {
       playerRef.current = new window.YT.Player(containerRef.current, {
-        videoId,
-        // subscribe to specific events
+        videoId:videoIdRef.current,
         events: {
           onReady: () => setPlayerReady(true),
-          onStateChange: onStateChange,
+          onStateChange: onStateChangeRef.current,
         },
       });
     }
@@ -26,7 +27,12 @@ const useYouTubePlayer = (videoId,onStateChange=(event)=>{})=>{
     return () => playerRef.current?.destroy();
   }, []);
 
-  return {playerRef,containerRef,playerReady}
-}
+  useEffect(() => {
+    if (playerRef.current && playerReady) {
+      playerRef.current.loadVideoById(videoId);
+    }
+  }, [videoId, playerReady]);
+  return { playerRef, containerRef, playerReady };
+};
 
-export default useYouTubePlayer
+export default useYouTubePlayer;
