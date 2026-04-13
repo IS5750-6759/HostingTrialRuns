@@ -1,34 +1,83 @@
 import { Save } from '@mui/icons-material';
-import { Button, FormControl, TextField } from '@mui/material';
 import axios from 'axios'
-
 import { Form, redirect, useActionData, useLoaderData, Await } from 'react-router'
 import { isValidUrl } from '../../utils/checkUrls';
 import { Suspense } from 'react';
 
 const EditVideo = () => {
-
   const { data: video, playlists } = useLoaderData();
   const errors = useActionData();
+
   return (
-    <Form method='post'>
-      <FormControl fullWidth>
-        <TextField defaultValue={video.title} name="title" />
-      </FormControl>
-      <FormControl fullWidth>
-        <TextField defaultValue={video.youtubeUrl} name="url" helperText={errors && errors.message} error={errors} />
-      </FormControl>
-      <select name='playlist'>
-        <Suspense fallback={<option>Loading...</option>}>
-          <Await resolve={playlists}>
-            {(awaitedPlayists) => awaitedPlayists.map(playlist => <option key={playlist.id} value={playlist.id}>{playlist.title}</option>)}
-          </Await>
-        </Suspense>
-      </select>
-      <FormControl>
-        <Button type='submit'><Save /></Button>
-      </FormControl>
-    </Form>
+    <div className="main-content" style={{ maxWidth: '600px' }}>
+      <div className="page-header">
+        <h1>Edit Video</h1>
+        <p>Update your video information</p>
+      </div>
+
+      <div style={{ background: 'white', borderRadius: '12px', padding: '2rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)', border: '1px solid var(--border)' }}>
+        <Form method='post'>
+          <div className="form-group">
+            <label htmlFor="title">Video Title</label>
+            <input
+              type="text"
+              id="title"
+              defaultValue={video.title}
+              name="title"
+              placeholder="Enter video title"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="url">YouTube URL</label>
+            <input
+              type="url"
+              id="url"
+              defaultValue={video.youtubeUrl}
+              name="url"
+              placeholder="https://www.youtube.com/embed/..."
+              required
+            />
+            {errors && (
+              <div style={{ marginTop: '0.5rem', color: 'var(--error)', fontSize: '0.875rem' }}>
+                {errors.message}
+              </div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="playlist">Playlist</label>
+            <select id="playlist" name='playlist' required>
+              <Suspense fallback={<option>Loading playlists...</option>}>
+                <Await resolve={playlists}>
+                  {(awaitedPlaylists) => (
+                    <>
+                      <option value="">-- Select a playlist --</option>
+                      {awaitedPlaylists.map(playlist => (
+                        <option key={playlist.id} value={playlist.id}>
+                          {playlist.title}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </Await>
+              </Suspense>
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+            <button type='submit' className="primary" style={{ display: 'inline-flex', gap: '0.5rem', alignItems: 'center' }}>
+              <Save style={{ fontSize: '20px' }} />
+              Save Changes
+            </button>
+            <a href="/video" className="action-btn" style={{ borderColor: 'var(--text)' }}>
+              Cancel
+            </a>
+          </div>
+        </Form>
+      </div>
+    </div>
   )
 }
 
@@ -58,7 +107,7 @@ export const action = async ({ params, request }) => {
 
   if (isValidUrl(youtubeUrl)) {
     try {
-      await axios.put("http://localhost:3000/videos/" + id, { id, title, youtubeUrl,playlistId })
+      await axios.put("http://localhost:3000/videos/" + id, { id, title, youtubeUrl, playlistId })
       return redirect("/video");
     } catch (e) {
       return { code: 500, message: e }
@@ -66,5 +115,4 @@ export const action = async ({ params, request }) => {
   }
 
   return { code: 400, message: "URL is invalid please ensure it is a valid embed link" };
-
 }

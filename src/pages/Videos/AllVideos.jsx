@@ -1,62 +1,52 @@
-import { Delete, Edit } from '@mui/icons-material';
-import { Grid, Typography } from '@mui/material';
+import { Delete, Edit, PlayArrow } from '@mui/icons-material';
 import axios from 'axios';
-import React, {Fragment} from 'react'
+import React from 'react'
 import { Link, useLoaderData } from 'react-router'
 
 const AllVideos = () => {
     const videos = useLoaderData();
-    return (
-        <>
     
-            <Grid container spacing={2}>
+    return (
+        <div className="main-content">
+            <div className="page-header">
+                <h1>All Videos</h1>
+                <p>Manage and view all your videos</p>
+            </div>
 
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-
-                            Name
-                            </Typography>
-                            </Grid>
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-                                
-                            View
-                            </Typography>
-                            </Grid>
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-                                
-                            Edit
-                            </Typography>
-                            </Grid>
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-                                
-                            Delete
-                            </Typography>
-                            </Grid>
-
-
-
-                    {videos.map(vid =><Fragment key={vid.id}>
-                        <Grid size={3} >
-                            {vid.title}
-                        </Grid>
-                        <Grid size={3} >
-                            <Link to={vid.id}>View</Link>
-                        </Grid>
-                        <Grid size={3}>
-                            <Link to={`edit/${vid.id}`}> 
-                            <Edit/>
-                            </Link>
-                        </Grid>
-                        <Grid size={3} >
-                            <Link to={`delete/${vid.id}`}><Delete/></Link>
-                        </Grid>
-                        </Fragment>
-                    )}
-          </Grid>
-        </>
+            {videos.length === 0 ? (
+                <div className="error">
+                    <h2>No videos found</h2>
+                    <p>Start by creating a new video</p>
+                </div>
+            ) : (
+                <div className="cards-grid">
+                    {videos.map(vid => (
+                        <div key={vid.id} className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">{vid.title}</h3>
+                            </div>
+                            <div className="card-content">
+                                <p style={{ textAlign: 'left', color: 'var(--text)', fontSize: '0.875rem' }}>
+                                    Video ID: <code>{vid.id}</code>
+                                </p>
+                            </div>
+                            <div className="card-actions">
+                                <Link to={vid.id} className="action-btn primary" style={{ display: 'inline-flex' }}>
+                                    <PlayArrow style={{ fontSize: '18px' }} />
+                                    View
+                                </Link>
+                                <Link to={`edit/${vid.id}`} className="action-btn" style={{ display: 'inline-flex' }}>
+                                    <Edit style={{ fontSize: '18px' }} />
+                                </Link>
+                                <Link to={`delete/${vid.id}`} className="action-btn" style={{ display: 'inline-flex', color: 'var(--error)', borderColor: 'var(--error)' }}>
+                                    <Delete style={{ fontSize: '18px' }} />
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
     )
 }
 
@@ -64,6 +54,5 @@ export default AllVideos
 
 export const loader = async () => {
     const { data } = await axios.get("http://localhost:3000/videos");
-
     return data;
 }

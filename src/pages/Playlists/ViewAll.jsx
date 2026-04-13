@@ -1,70 +1,64 @@
 import axios from 'axios';
-import React, {Fragment} from 'react'
-import { useLoaderData,Link } from 'react-router'
-import { Grid,Typography } from '@mui/material';
-import { Edit,Delete } from '@mui/icons-material';
+import React from 'react'
+import { useLoaderData, Link } from 'react-router'
+import { Edit, Delete, PlaylistPlay } from '@mui/icons-material';
 
 const ViewAll = () => {
     const playlistData = useLoaderData();
-  return (
-    <>
     
-            <Grid container spacing={2}>
+    return (
+        <div className="main-content">
+            <div className="page-header">
+                <h1>All Playlists</h1>
+                <p>Browse and manage your video playlists</p>
+            </div>
 
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-
-                            Name
-                            </Typography>
-                            </Grid>
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-                                
-                            View
-                            </Typography>
-                            </Grid>
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-                                
-                            Edit
-                            </Typography>
-                            </Grid>
-                        <Grid size={3}>
-                            <Typography variant='h4'>
-                                
-                            Delete
-                            </Typography>
-                            </Grid>
-
-
-
-                    {playlistData.map(playlist =><Fragment key={playlist.id}>
-                        <Grid size={3} >
-                            <Link to={`watch/${playlist.id}`}>
-                            {playlist.title}
-                            </Link>
-                        </Grid>
-                        <Grid size={3} >
-                            <Link to={playlist.id}>View</Link>
-                        </Grid>
-                        <Grid size={3}>
-                            <Link to={`edit/${playlist.id}`}> 
-                            <Edit/>
-                            </Link>
-                        </Grid>
-                        <Grid size={3} >
-                            <Link to={`delete/${playlist.id}`}><Delete/></Link>
-                        </Grid>
-                        </Fragment>
-                    )}
-          </Grid>
-        </>
-  )
+            {playlistData.length === 0 ? (
+                <div className="error">
+                    <h2>No playlists found</h2>
+                    <p>Create your first playlist to get started</p>
+                </div>
+            ) : (
+                <div className="cards-grid">
+                    {playlistData.map(playlist => (
+                        <div key={playlist.id} className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">
+                                    <PlaylistPlay style={{ fontSize: '20px', verticalAlign: 'middle', marginRight: '0.5rem' }} />
+                                    {playlist.title}
+                                </h3>
+                            </div>
+                            <div className="card-content">
+                                <p style={{ textAlign: 'left', color: 'var(--text)', fontSize: '0.875rem' }}>
+                                    Playlist ID: <code>{playlist.id}</code>
+                                </p>
+                            </div>
+                            <div className="card-actions">
+                                <Link to={`watch/${playlist.id}`} className="action-btn primary" style={{ display: 'inline-flex' }}>
+                                    <PlaylistPlay style={{ fontSize: '18px' }} />
+                                    Watch
+                                </Link>
+                                <Link to={playlist.id} className="action-btn" style={{ display: 'inline-flex' }}>
+                                    View
+                                </Link>
+                                <Link to={`edit/${playlist.id}`} className="action-btn" style={{ display: 'inline-flex' }}>
+                                    <Edit style={{ fontSize: '18px' }} />
+                                </Link>
+                                <Link to={`delete/${playlist.id}`} className="action-btn" style={{ display: 'inline-flex', color: 'var(--error)', borderColor: 'var(--error)' }}>
+                                    <Delete style={{ fontSize: '18px' }} />
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    )
 }
 
 export default ViewAll
 
-export const loader = async ()=>{
-    const {data} = await axios.get("http://localhost:3000/playlists");
+export const loader = async () => {
+    const { data } = await axios.get("http://localhost:3000/playlists");
     return data
 }

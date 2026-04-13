@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet, redirect } from "react-router";
 import "./App.css";
 import { DefaultLayout } from "./pages/DefaultLayout";
+import Home from "./pages/Home";
 import AllVideos, {loader as videoLoader} from "./pages/Videos/AllVideos";
 import EditVideo, { loader as editVideoLoader, action as editVideoAction} from "./pages/Videos/Edit";
 import axios from "axios";
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
       return token.data.user
     },
     children: [
-      { index: true, element: <h1>Home</h1> },
+      { index: true, Component: Home },
       {path:"login",loader:signInLoader},
       {path:"logout",loader:async ()=>{
         await supabase.auth.signOut();

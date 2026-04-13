@@ -8,44 +8,31 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { moveToNextVideo } from "../../store/playlist";
 import { setWatchPercent } from "../../store/video";
+import { PlayArrow, Pause, Replay, Speed } from "@mui/icons-material";
 
 export default function YouTubePlayer() {
-  // const {
-  //   videos,
-  //   currentVideoIndex,
-  //   setCurrentVideoIndex,
-  //   setWatchPercent: setProgress,
-  // } = useContext(VideosContext);
-
-  const videos = useSelector(state=>state.playlists.videos)
-  const currentVideoIndex = useSelector(state=>state.playlists.currentVideoIndex)
+  const videos = useSelector(state => state.playlists.videos)
+  const currentVideoIndex = useSelector(state => state.playlists.currentVideoIndex)
   const dispatch = useDispatch();
-  
+
   const onVideoEnd = (event) => {
     if (event.data === window.YT.PlayerState.ENDED) {
-      // If the video has ended either increment the video or start the playlist over
-      // setCurrentVideoIndex((prev) => {
-      //   return (prev + 1) % videos.length;
-      // });
       dispatch(moveToNextVideo())
     }
   };
-  // Grab the current video id from the url
+
   const videoId = videos[currentVideoIndex].youtubeUrl.split("/").pop();
-  // Initialize the video player
   const { playerRef, containerRef, playerReady } = useYouTubePlayer(
     videoId,
     onVideoEnd,
   );
-  // Subscribe to progress updates.
+
   useVideoProgress(videoId, playerReady, playerRef, (elapsed, total) =>
-    // setProgress((Number(elapsed) / Number(total)) * 100),
     dispatch(setWatchPercent((Number(elapsed) / Number(total)) * 100))
   );
-  // Load next video on success
+
   useLoadNextVideo(playerRef, playerReady, videoId);
 
-  // User controls
   const play = () => {
     playerRef.current.playVideo();
   };
@@ -58,14 +45,32 @@ export default function YouTubePlayer() {
 
   return (
     <div>
-      <div ref={containerRef}></div>
+      <div ref={containerRef} className="video-player-container"></div>
       {playerReady && (
-        <>
-          <button onClick={speedUp}>{">>"}</button>
-          <button onClick={play}>Play</button>
-          <button onClick={pause}>Pause</button>
-          <button onClick={restart}>Restart</button>
-        </>
+        <div style={{
+          display: 'flex',
+          gap: '0.75rem',
+          marginTop: '1.5rem',
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          <button onClick={play} className="primary" style={{ display: 'inline-flex', gap: '0.5rem', alignItems: 'center' }}>
+            <PlayArrow style={{ fontSize: '20px' }} />
+            Play
+          </button>
+          <button onClick={pause} style={{ display: 'inline-flex', gap: '0.5rem', alignItems: 'center' }}>
+            <Pause style={{ fontSize: '20px' }} />
+            Pause
+          </button>
+          <button onClick={restart} style={{ display: 'inline-flex', gap: '0.5rem', alignItems: 'center' }}>
+            <Replay style={{ fontSize: '20px' }} />
+            Restart
+          </button>
+          <button onClick={speedUp} style={{ display: 'inline-flex', gap: '0.5rem', alignItems: 'center' }}>
+            <Speed style={{ fontSize: '20px' }} />
+            Speed Up
+          </button>
+        </div>
       )}
     </div>
   );
