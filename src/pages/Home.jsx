@@ -10,17 +10,6 @@ const Home = () => {
         paddingTop: '2rem',
         paddingBottom: '2rem'
       }}>
-        <h1 style={{
-          fontSize: '3.5rem',
-          background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '1rem',
-          fontWeight: '800',
-          letterSpacing: '-2px'
-        }}>
-          📺 Welcome to VideoHub
-        </h1>
         <p style={{
           fontSize: '1.25rem',
           color: 'var(--text)',
