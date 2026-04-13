@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet } from 'react-router'
 import { Navbar } from '../components/Layout/Navbar'
 
-export const DefaultLayout = () => {
+const DefaultLayout = () => {
   return (
     <div style={{
       display: 'flex',
@@ -29,3 +29,5 @@ export const DefaultLayout = () => {
     </div>
   )
 }
+
+export default DefaultLayout
