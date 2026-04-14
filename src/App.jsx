@@ -88,7 +88,7 @@ const router = createBrowserRouter([
             path: "delete/:id",
             loader: async ({ params }) => {
               try {
-                await axios.delete("https://script.google.com/macros/s/AKfycbynsFiK9xHDXtLY_X9ohpW48-KyMpr1Mhm8JBlN0DT6UPQbEhXbauJ9R1xb4teTiMMYhA/exec/videos/" + params.id);
+                await axios.delete("http://144.24.55.88:3000/videos/" + params.id);
               } catch (e) {
                 console.log(e);
               }
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(initializeData("https://script.google.com/macros/s/AKfycbynsFiK9xHDXtLY_X9ohpW48-KyMpr1Mhm8JBlN0DT6UPQbEhXbauJ9R1xb4teTiMMYhA/exec/videos"));
+    dispatch(initializeData("http://144.24.55.88:3000/videos"));
   }, [dispatch]);
 
   useYouTubeInit();
