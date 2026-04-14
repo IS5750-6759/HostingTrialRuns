@@ -21,7 +21,7 @@ export const VideosContext = createContext({
 
 export const VideosProvider = ({ children }) => {
     // Subscribe to our backend
-    const {data:videos,loading,error} = useBackendSync(`http://localhost:3000/videos`)
+    const {data:videos,loading,error} = useBackendSync(`https://script.google.com/macros/s/AKfycbynsFiK9xHDXtLY_X9ohpW48-KyMpr1Mhm8JBlN0DT6UPQbEhXbauJ9R1xb4teTiMMYhA/exec/videos`)
     // Track the current video
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 

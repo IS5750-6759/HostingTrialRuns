@@ -53,6 +53,6 @@ const AllVideos = () => {
 export default AllVideos
 
 export const loader = async () => {
-    const { data } = await axios.get("http://localhost:3000/videos");
+    const { data } = await axios.get("https://script.google.com/macros/s/AKfycbynsFiK9xHDXtLY_X9ohpW48-KyMpr1Mhm8JBlN0DT6UPQbEhXbauJ9R1xb4teTiMMYhA/exec/videos");
     return data;
 }

@@ -59,6 +59,6 @@ const ViewAll = () => {
 export default ViewAll
 
 export const loader = async () => {
-    const { data } = await axios.get("http://localhost:3000/playlists");
+    const { data } = await axios.get("https://script.google.com/macros/s/AKfycbynsFiK9xHDXtLY_X9ohpW48-KyMpr1Mhm8JBlN0DT6UPQbEhXbauJ9R1xb4teTiMMYhA/exec/playlists");
     return data
 }
